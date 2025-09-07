@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A model for speech generation with an AR + diffusion architecture."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = "==3.11.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     # "License :: OSI Approved :: MIT License",
@@ -31,7 +31,10 @@ dependencies = [
     "absl-py",
     "gradio",
     "av",
-    "aiortc"
+    "aiortc",
+    "setuptools>=80.9.0",
+    "flash-attn",
+    "triton-windows<3.4",
 ]
 
 
@@ -41,3 +44,28 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
+
+
+[project.optional-dependencies]
+cu128 = [
+  "torch==2.7.1",
+  "torchvision==0.22.1",
+  "torchaudio==2.7.1"
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu128", extra = "cu128" },
+]
+torchvision = [
+  { index = "pytorch-cu128", extra = "cu128" },
+]
+torchaudio = [
+  { index = "pytorch-cu128", extra = "cu128" },
+]
+flash-attn = { path = "flash_attn-2.7.4+cu128torch2.7-cp311-cp311-win_amd64.whl" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

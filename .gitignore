@@ -1,5 +1,13 @@
 # Initially taken from Github's Python gitignore file
 
+*.mp4
+*.profile_default
+*.whl
+tests/
+*-pt
+*.pdf
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -86,7 +94,7 @@ profile_default/
 ipython_config.py
 
 # pyenv
-.python-version
+# .python-version
 
 # celery beat schedule file
 celerybeat-schedule
@@ -160,7 +168,7 @@ tags
 .pre-commit*
 
 # .lock
-*.lock
+#*.lock
 
 # DS_Store (MacOS)
 .DS_Store

@@ -851,6 +851,26 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
                         elem_classes="speaker-item"
                     )
                     speaker_selections.append(speaker)
+                    
+                def refresh_speakers_proxy():
+                    demo_instance.setup_voice_presets()
+                    updated_choices = list(demo_instance.available_voices.keys())
+                    # Return gr.update objects for each speaker dropdown to update their choices
+                    return [gr.update(choices=updated_choices) for _ in range(4)]
+                    
+                speaker_refresh_button = gr.Button(
+                    "🔄 Refresh Speakers",
+                    size="sm",
+                    variant="secondary",
+                    elem_classes="speaker-refresh-btn",
+                    scale=1
+                )
+                
+                speaker_refresh_button.click(
+                    fn=refresh_speakers_proxy,
+                    inputs=[],
+                    outputs=speaker_selections  # Update all 4 speaker dropdowns
+                )
                 
                 # Advanced settings
                 gr.Markdown("### ⚙️ **Advanced Settings**")
@@ -864,6 +884,16 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
                         step=0.05,
                         label="CFG Scale (Guidance Strength)",
                         # info="Higher values increase adherence to text",
+                        elem_classes="slider-container"
+                    )
+
+                # Random seed for reproducibility
+                seed_slider = gr.Slider(
+                        minimum=0,
+                        maximum=10000,
+                        value=42,
+                        step=1,
+                        label="Random Seed",
                         elem_classes="slider-container"
                     )
                 
@@ -990,6 +1020,7 @@ Or paste text directly and it will auto-assign speakers.""",
                 # Extract speakers and parameters
                 speakers = speakers_and_params[:4]  # First 4 are speaker selections
                 cfg_scale = speakers_and_params[4]   # CFG scale
+                seed = speakers_and_params[5]        # Random seed
                 
                 # Clear outputs and reset visibility at start
                 yield None, gr.update(value=None, visible=False), "🎙️ Starting generation...", gr.update(visible=True), gr.update(visible=False), gr.update(visible=True)
@@ -997,6 +1028,8 @@ Or paste text directly and it will auto-assign speakers.""",
                 # The generator will yield multiple times
                 final_log = "Starting generation..."
                 
+                # Set the random seed for this generation
+                set_seed(seed)
                 for streaming_audio, complete_audio, log, streaming_visible in demo_instance.generate_podcast_streaming(
                     num_speakers=int(num_speakers),
                     script=script,
@@ -1052,7 +1085,7 @@ Or paste text directly and it will auto-assign speakers.""",
             queue=False
         ).then(
             fn=generate_podcast_wrapper,
-            inputs=[num_speakers, script_input] + speaker_selections + [cfg_scale],
+            inputs=[num_speakers, script_input] + speaker_selections + [cfg_scale, seed_slider],
             outputs=[audio_output, complete_audio_output, log_output, streaming_status, generate_btn, stop_btn],
             queue=True  # Enable Gradio's built-in queue
         )
