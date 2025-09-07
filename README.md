@@ -19,6 +19,8 @@
 </picture>
 </div>
 
+> **NOTE:** This is a fork of VibeVoice at a point before it got removed from Github. Links have been updated to use a 7B version I have hosted on HF, as allowed by the MIT license adopted by the original model and code
+
 VibeVoice is a novel framework designed for generating **expressive**, **long-form**, **multi-speaker** conversational audio, such as podcasts, from text. It addresses significant challenges in traditional Text-to-Speech (TTS) systems, particularly in scalability, speaker consistency, and natural turn-taking.
 
 A core innovation of VibeVoice is its use of continuous speech tokenizers (Acoustic and Semantic) operating at an ultra-low frame rate of 7.5 Hz. These tokenizers efficiently preserve audio fidelity while significantly boosting computational efficiency for processing long sequences. VibeVoice employs a [next-token diffusion](https://arxiv.org/abs/2412.08635) framework, leveraging a Large Language Model (LLM) to understand textual context and dialogue flow, and a diffusion head to generate high-fidelity acoustic details.
@@ -137,20 +139,20 @@ We'd like to thank [PsiPi](https://huggingface.co/PsiPi) for sharing an interest
 apt update && apt install ffmpeg -y # for demo
 
 # For 1.5B model
-python demo/gradio_demo.py --model_path microsoft/VibeVoice-1.5B --share
+python demo/gradio_demo.py --model_path microsoft/VibeVoice-1.5B
 
 # For Large model
-python demo/gradio_demo.py --model_path microsoft/VibeVoice-Large --share
+python demo/gradio_demo.py --model_path Jmica/VibeVoice7B
 ```
 
 ### Usage 2: Inference from files directly
 ```bash
 # We provide some LLM generated example scripts under demo/text_examples/ for demo
 # 1 speaker
-python demo/inference_from_file.py --model_path microsoft/VibeVoice-Large --txt_path demo/text_examples/1p_abs.txt --speaker_names Alice
+python demo/inference_from_file.py --model_path Jmica/VibeVoice7B --txt_path demo/text_examples/1p_abs.txt --speaker_names Alice
 
 # or more speakers
-python demo/inference_from_file.py --model_path microsoft/VibeVoice-Large --txt_path demo/text_examples/2p_music.txt --speaker_names Alice Frank
+python demo/inference_from_file.py --model_path Jmica/VibeVoice7B --txt_path demo/text_examples/2p_music.txt --speaker_names Alice Frank
 ```
 
 ## FAQ
