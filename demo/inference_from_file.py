@@ -263,7 +263,7 @@ def main():
         attn_impl_primary = "sdpa"  # flash_attention_2 not supported on MPS
     elif args.device == "cuda":
         load_dtype = torch.bfloat16
-        attn_impl_primary = "flash_attention_2"
+        attn_impl_primary = "sdpa"
     else:  # cpu
         load_dtype = torch.float32
         attn_impl_primary = "sdpa"

@@ -63,7 +63,7 @@ class VibeVoiceDemo:
             attn_impl_primary = "sdpa"
         elif self.device == "cuda":
             load_dtype = torch.bfloat16
-            attn_impl_primary = "flash_attention_2"
+            attn_impl_primary = "sdpa"
         else:
             load_dtype = torch.float32
             attn_impl_primary = "sdpa"
@@ -499,7 +499,7 @@ class VibeVoiceDemo:
                 audio_streamer=audio_streamer,
                 stop_check_fn=check_stop_generation,  # Pass the stop check function
                 verbose=False,  # Disable verbose in streaming mode
-                refresh_negative=True,
+                refresh_negative=False,
             )
             
         except Exception as e:
