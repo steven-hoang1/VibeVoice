@@ -33,7 +33,7 @@ def count_words(text: str) -> int:
     return len(text.split())
 
 
-def split_text_into_chunks(text: str, max_words: int = 500) -> List[str]:
+def split_text_into_chunks(text: str, max_words: int = 400) -> List[str]:
     """Split text into chunks preserving sentence boundaries"""
     sentences = re.split(r'(?<=[.!?])\s+', text)
     
@@ -213,7 +213,7 @@ class VibeVoiceBatchProcessor:
             ]
             import random
             padding = random.choice(padding_options)
-            processed_text += padding
+            processed_text += " This sentence is just padding to help the model finish properly." + padding
         
         # Format text with speaker
         formatted_text = f"Speaker 0: {processed_text}"
@@ -373,7 +373,7 @@ def main():
     parser.add_argument("--model_path", type=str, default="microsoft/VibeVoice-1.5B", help="Model path")
     parser.add_argument("--voice_prompt", type=str, required=True, help="Voice audio file")
     parser.add_argument("--speaker_name", type=str, default="Speaker", help="Speaker name")
-    parser.add_argument("--chunk_size", type=int, default=500, help="Words per chunk")
+    parser.add_argument("--chunk_size", type=int, default=400, help="Words per chunk")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--cfg_scale", type=float, default=1.3, help="CFG scale for generation")
     parser.add_argument("--inference_steps", type=int, default=10, help="Number of inference steps")
@@ -527,7 +527,7 @@ def main():
                 # Attempt 2: Split into smaller sentences
                 lambda t: '. '.join(t.split('.')[:5]),  # Take first 5 sentences
                 # Attempt 3: Add explicit speaker tag
-                lambda t: f"Speaker 0: {t[:500]}",  # Limit to 500 chars
+                lambda t: f"Speaker 0: {t[:400]}",  # Limit to 500 chars
                 # Attempt 4: Remove all punctuation except periods
                 lambda t: re.sub(r'[^\w\s\.]', '', t),
             ]
